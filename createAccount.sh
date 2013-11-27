@@ -4,6 +4,11 @@
 # username as $1
 # password as $2
 
+if [ $# -ne 2 ]; then
+        echo "Usage: $0 username password";
+        exit 1;
+fi
+
 useradd -d /home/$1 -m $1 -p $2
 echo User $1 added
 
