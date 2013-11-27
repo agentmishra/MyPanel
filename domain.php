@@ -72,11 +72,15 @@ if(!$mySession['authed']) {
             <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
           </p>
           <div class="well">
-            <h2>File Manager</h2>
+            <h2>Domain Manager</h2>
             <p>
-              <b>There is no fancy file-manager in this build, sorry.</b>
-              <br>
-              <i>Use <a href="http://www.net2ftp.com/index.php">http://www.net2ftp.com/index.php</a> to connect to files.</i>
+              <?php
+                $query = $db->prepare('SELECT * FROM domains WHERE domainowner = :do');
+                $query->execute(array('do' => $mySession['username']));
+                while($row = $query->fetch()) {
+                  echo 'Domain: '.$row['domain'].'<br>';
+                }
+              ?> 
             </p>
           </div>
         </div><!--/span-->
