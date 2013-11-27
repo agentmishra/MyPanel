@@ -16,6 +16,12 @@ echo ---------------------------------
 echo ----- Starting Installation -----
 echo ---------------------------------
 
+if [ $(id -u) != 0 ]; then
+	echo "You need to be logged in as root to perform this operation";
+	exit 1;
+fi
+
+
 # Create a account to store files - isolated from root
 useradd -d /home/mypanel_main -m mypanel_main -p $1
 echo Created mypanel_main account with password $1
