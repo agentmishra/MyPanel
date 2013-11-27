@@ -28,13 +28,21 @@ if($_POST['submit']) {
 	$password = str_replace('eval', '', $password);
 	$query = $db->query('SELECT * FROM users WHERE `user`="'.$username.'"');
 	foreach($query as $row) {
+		$salt = $row['salt'];
 		$pass = $row['pass'];
-		if($pass == md5($password)) {
+		/*if($pass == md5($password)) {
 			$_SESSION['authed'] = 'yes';
 			$_SESSION['username'] = $username;
 			exit( 'Logged in.');
 		} else {
 			
+		}*/
+		// Since MD5 is really horrible, using a better method
+		$hash = crypt($password, '$2y$07$'.$salt.'$');
+		if($pass == $hash) {
+			$_SESSION['authed'] = 'yes';
+			$_SESSION['username'] = $username;
+			exit('Logged in.');
 		}
 	}
 }
