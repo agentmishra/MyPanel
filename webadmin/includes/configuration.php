@@ -5,7 +5,7 @@
 
 $db_hostname = 'localhost';
 $db_username = 'root';
-$db_password = 'stellarboi';
+$db_password = '';
 $db_name = 'lhcp';
 $db_build = 'mysql';
 
