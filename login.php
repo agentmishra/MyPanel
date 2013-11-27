@@ -6,7 +6,9 @@ require_once('includes/configuration.php');
 require_once('includes/session.php');
 $session = new Session();
 $mySession = $session->getSessionData();
-$mySession['token'] = rand(50,1500); // Assign a random token, even if not logged in, to help prevent CSRF
+$size = mcrypt_get_iv_size(MCRYPT_CAST_256, MCRYPT_MODE_CFB);
+$iv = hash('sha256', mcrypt_create_iv($size, MCRYPT_DEV_URANDOM));
+$mySession['token'] = $iv; // Assign a random token, even if not logged in, to help prevent CSRF
 if($mySession['authed']) {
 	exit('<a href="index.php">You are already logged in.</a>');
 }
