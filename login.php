@@ -26,8 +26,20 @@ if($_POST['submit']) {
 	$password = htmlspecialchars($password, ENT_QUOTES);
 	$password = str_replace('exec', '', $password);
 	$password = str_replace('eval', '', $password);
-	$query = $db->query('SELECT * FROM users WHERE `user`="'.$username.'"');
-	foreach($query as $row) {
+	$query = $db->prepare('SELECT * FROM users WHERE user = :usern');
+	$query->execute(array('usern' => $username));
+	while($row = $query->fetch()) {
+		$salt = $row['salt'];
+		$pass = $row['pass'];
+		$hash = crypt($password, '$2y$07$'.$salt.'$');
+		if($pass == $hash) {
+			$_SESSION['authed'] = 'yes';
+			$_SESSION['username'] = $username;
+			exit('Logged in.');
+		}
+	}
+	//$query = $db->query('SELECT * FROM users WHERE `user`="'.$username.'"');
+	/*foreach($query as $row) {
 		$salt = $row['salt'];
 		$pass = $row['pass'];
 		/*if($pass == md5($password)) {
@@ -36,7 +48,7 @@ if($_POST['submit']) {
 			exit( 'Logged in.');
 		} else {
 			
-		}*/
+		}
 		// Since MD5 is really horrible, using a better method
 		$hash = crypt($password, '$2y$07$'.$salt.'$');
 		if($pass == $hash) {
@@ -44,7 +56,7 @@ if($_POST['submit']) {
 			$_SESSION['username'] = $username;
 			exit('Logged in.');
 		}
-	}
+	}*/
 }
 ?>
 
